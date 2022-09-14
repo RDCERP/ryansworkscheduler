@@ -5,5 +5,8 @@
 // When the page is refreshed, the saved events persist
 
 
-var: currentDay = moment().format('dddd, MMMM Do YYYY');
-var: currentHour = moment().format('H');
+var currentDay = moment().format('dddd, MMMM Do YYYY');
+var currentHour = moment().format('H');
+var currentMinute = moment().format('mm');
+
+$("#currentDay").text(currentDay + " " + currentHour + ":" + currentMinute);
