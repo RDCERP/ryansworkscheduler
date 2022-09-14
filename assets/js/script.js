@@ -4,64 +4,71 @@
 // When you click on the save button for that time slot, the text for that event is saved in local storage
 // When the page is refreshed, the saved events persist
 
-let timeBlocks = $(".time-block");      // time blocks
-let saveBtn = $(".saveBtn");            // save buttons
-let textArea = $(".description");       // text areas
-let time = $(".hour");                  // hours
-let timeArray = [];                     // array of hours
-let textArray = [];                     // array of text areas
-let timeBlockArray = [];                // array of time blocks
-let timeBlockHourArray = [];            // array of time block hours
 
-$(document).ready(function () {
-
+// The current day is displayed at the top of the calendar when the planner is opened using moment.js
     var now = moment();                         // current time
     $("#currentDay").text(now);                 // display current time   
         setInterval(function () {               // update time every second
-        now = moment();
+        now = moment();                         
         $("#currentDay").text(now);
         } , 1000);
 
-    $(".saveBtn").on("click", function () {                   // save button click event
-        let text = $(this).siblings(".description").val();    // get text area value
-        let time = $(this).parent().attr("id");               // get time block id
-        localStorage.setItem(text, JSON.stringify(text));  // save text and time to local storage            
-        // save text area value to local storage
-        alert("Saved!");                                      // alert user that text area value was saved
+// I am presented with timeblocks for standard business hours
+    var timeBlocks = [9, 10, 11, 12, 13, 14, 15, 16, 17];   // time blocks for standard business hours
+    var timeBlock = $(".time-block");                       // time block class
+    var timeBlockHour = $(".hour");                         // hour class
+    var timeBlockText = $(".description");                  // description class
+    var timeBlockSave = $(".saveBtn");                      // save button class
+
+// When you view the time blocks for that day, each time block is color coded to indicate whether it is in the past, present, or future
+    function colorCode() {
+        for (var i = 0; i < timeBlocks.length; i++) {               // loop through time blocks
+            var timeBlockHour = timeBlocks[i];                      // time block hour
+            var timeBlockText = timeBlocks[i];                      // time block text
+            var timeBlockSave = timeBlocks[i];                      // time block save button
+            if (timeBlocks[i] < now.hour()) {                       // if time block hour is less than current hour
+                $(timeBlock).addClass("past");                      // add past class
+            } else if (timeBlocks[i] === now.hour()) {              // if time block hour is equal to current hour
+                $(timeBlock).addClass("present");                   // add present class
+            } else {                                                // if time block hour is greater than current hour
+                $(timeBlock).addClass("future");                    // add future class
+            }
+        }
+    }
+    colorCode();
+
+// When you click on the save button for that time slot, the text for that event is saved in local storage usin JSON.stringify
+    $(timeBlockSave).on("click", function() {                                   // when save button is clicked
+        var timeBlockText = $(this).siblings(".description").val();            // time block text
+        var timeBlockHour = $(this).parent().attr("id");                        // time block hour
+        localStorage.setItem(timeBlockHour, JSON.stringify(timeBlockText));     // save time block text to local storage
+
+        for (var i = 0; i < timeBlocks.length; i++) {                           // loop through time blocks
+            var timeBlockHour = timeBlocks[i];                                  // time block hour
+            var timeBlockText = timeBlocks[i];                                  // time block text
+            var timeBlockSave = timeBlocks[i];                                  // time block save button
+            var savedText = JSON.parse(localStorage.getItem(timeBlockHour));    // get saved text from local storage
+            $(timeBlockText).val(savedText);                                    // display saved text
+        }
     });
-    // get time blocks
 
-        // loop through time blocks
-        for (let i = 0; i < timeBlocks.length; i++) {
-    
-            // push time blocks to array
-            timeBlockArray.push(timeBlocks[i]);
-    
-            // push time block hours to array
-            timeBlockHour.push(timeBlockArray[i].children[0].innerText);
-    
-            // push time block hours to array
-            timeBlockHourArray.push(timeBlockHour[i].slice(0, 2));
-    
-            // push text areas to array
-            textArray.push(textArea[i]);
-    
-            // push save buttons to array
-            saveArray.push(saveBtn[i]);
-    
-            // push hours to array
-            timeArray.push(time[i]);
-    
-            // push hours to array
-            timeArray.push(time[i]);
-            // console.log(timeArray);
-       } });
+// When the page is refreshed, the saved events persist using JSON.parse
+    function loadText() {                                                               // load text from local storage
+        for (var i = 0; i < timeBlocks.length; i++) {                                   // loop through time blocks
+            var timeBlockHour = timeBlocks[i];                                          // time block hour
+            var timeBlockText = timeBlocks[i];                                          // time block text
+            var timeBlockSave = timeBlocks[i];                                          // time block save button
+            var savedText = JSON.parse(localStorage.getItem(timeBlockHour));            // get saved text from local storage
+            $(timeBlockText).val(savedText);                                            // display saved text
+        }   
+    }
+    loadText();                                                                         // load text from local storage                          
+
+// When you click on the save button for that time slot, the text for that event is saved in local storage using json.stringify
+    $(timeBlockSave).on("click", timeBlockSave)                                          // when save button is clicked
 
 
-
-    
-
-
-
+// When the page is refreshed, the saved events persist using JSON.parse
+    // $(returnText).on("click", returnText)                                                // when page is refreshed, saved events persist
 
 
