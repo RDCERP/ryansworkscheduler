@@ -1,3 +1,7 @@
+##### https://github.com/RDCERP/ryansworkscheduler
+##### https://rdcerp.github.io/ryansworkscheduler/
+
+
 ## Ryans Work Scheduler
 
 #### I open the planner
